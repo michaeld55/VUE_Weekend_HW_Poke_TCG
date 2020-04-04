@@ -1,7 +1,22 @@
 <template>
   <div id="app">
-    <p v-if="!cards.length"> LOADING... </p>
-    <p>List of Cards: <card-list :cards="cards" /></p>
+    <header><h1>Pokémon TCG</h1></header>
+    Search For Cards By <select v-on:change="changeMode" v-model="searchMode">
+      <option value="name" selected>Name</option>
+      <option value="artist">Artist</option>
+      <option value="nationalPokedexNumber">Pokédex Number</option>
+      <option value="set">Set</option>
+      <option value="number">Card Number</option>
+    </select>:
+    <input type="text" v-model="search" placeholder="Search for Cards..." v-on:keyup="searchForCard">
+    <p v-if="!cards.length"> Please Enter A Valid Search Cards Will Show Below</p>
+    <span>
+      <p>Found Cards: <card-list :cards="cards" /></p>
+          <card-detail
+           v-if="selectedCard"
+            :card="selectedCard"
+          ></card-detail>
+    </span>
   </div>
 </template>
 
@@ -15,11 +30,14 @@ export default {
   name: 'App',
   components: {
     "card-list": cardList,
-    "card-list-item": cardListItem
+    "card-list-item": cardListItem,
+    "card-detail": cardDetail
   },
   data(){
     return{
       cards: [],
+      "search": "",
+      "searchMode": "name",
       selectedCard: null
     }
   },
@@ -27,10 +45,20 @@ export default {
 
   },
   methods:{
-    getCards: function() {
-      const promises = [1,2,3].map(num =>{
-        return fetch((`https://api.pokemontcg.io/v1/cards?page=${num}`)
-        ).then(response => response.json());
+    changeMode: function() {
+      if (this.search.length > 0){
+        this.searchForCard()
+      }
+    },
+    searchForCard: function() {
+      var pages = [];
+      for (var i = 1; i <= 2; i++) {
+        pages.push(i);
+      }
+      //can go up to 122
+      const promises = pages.map(num =>{
+        return fetch(`https://api.pokemontcg.io/v1/cards?${this.searchMode}=${this.search.toLowerCase()}&page=${num}`)
+        .then(response => response.json());
       });
 
       Promise.all(promises)
@@ -44,6 +72,7 @@ export default {
       .then(() => this.sortCards("name"))
       .catch(error=> console.log(error));
     },
+
     sortCards: function(property) {
       this.cards.sort((a, b) => {
         return a[property] < b[property] ? -1 : 1;
@@ -51,10 +80,20 @@ export default {
     },
   },
   mounted(){
-    this.getCards();
+    // this.searchForCard();
+    
+    eventBus.$on("card-selected", card => (this.selectedCard = card));
 
   },
 }
 </script>
 
+<style lang="css" scoped>
+#app {
+  background-color: #6EC3F4;
+}
 
+#list-info {
+  display: flex;
+}
+</style>

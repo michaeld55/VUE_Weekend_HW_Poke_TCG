@@ -28,6 +28,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="css" scoped>
 
+.card-list {
+
+  width: 100%;
+  height: 1000px;
+  overflow-y: scroll;
+  display: flex;
+  flex-wrap: wrap;
+}
 </style>
