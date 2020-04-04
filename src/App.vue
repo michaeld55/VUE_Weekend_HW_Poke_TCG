@@ -9,7 +9,7 @@
       <option value="number">Card Number</option>
     </select>:
     <input type="text" v-model="search" placeholder="Search for Cards..." v-on:keyup="searchForCard">
-    <p v-if="!cards.length"> Please Enter A Valid Search Cards Will Show Below</p>
+    <p v-if="!cards.length"> Please Enter A Valid Search Cards Will Be Shown Below</p>
     <span>
       <p>Found Cards: <card-list :cards="cards" /></p>
           <card-detail
