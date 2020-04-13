@@ -9,7 +9,7 @@
       <option value="number">Card Number</option>
     </select>:
     <input type="text" v-model="search" placeholder="Search for Cards..." v-on:keyup="searchForCard">
-    <p v-if="!cards.length"> Please Enter A Valid Search Cards Will Be Shown Below</p>
+    <p v-if="!cards.length"> Please Enter A Valid Search (Cards Will Be Shown Below)</p>
     <span>
       <p>Found Cards: <card-list :cards="cards" /></p>
           <card-detail
@@ -74,10 +74,9 @@ export default {
     },
 
     sortCards: function(property) {
-      this.cards.sort((a, b) => {
-        return a[property] < b[property] ? -1 : 1;
-      });
+      this.cards.sort((a, b) => a[property] < b[property] ? -1 : 1;)
     },
+    
   },
   mounted(){
     // this.searchForCard();
