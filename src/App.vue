@@ -74,7 +74,7 @@ export default {
     },
 
     sortCards: function(property) {
-      this.cards.sort((a, b) => a[property] < b[property] ? -1 : 1;)
+      this.cards.sort((a, b) => a[property] < b[property] ? -1 : 1)
     },
     
   },
